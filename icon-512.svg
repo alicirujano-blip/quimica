@@ -5,6 +5,21 @@
       <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
     </linearGradient>
   </defs>
+
+  <!-- Fondo -->
   <rect width="512" height="512" rx="100" fill="url(#grad)"/>
-  <text x="256" y="350" font-family="Arial, sans-serif" font-size="280" fill="white" text-anchor="middle" font-weight="bold">⚗️</text>
+
+  <!-- Átomo central (núcleo) -->
+  <circle cx="256" cy="256" r="48" fill="white" opacity="0.95"/>
+
+  <!-- Órbitas de electrones -->
+  <ellipse cx="256" cy="256" rx="160" ry="65" fill="none" stroke="white" stroke-width="8" opacity="0.8"/>
+  <ellipse cx="256" cy="256" rx="65" ry="160" fill="none" stroke="white" stroke-width="8" opacity="0.8"/>
+  <ellipse cx="256" cy="256" rx="130" ry="130" fill="none" stroke="white" stroke-width="8" opacity="0.8"/>
+
+  <!-- Electrones -->
+  <circle cx="416" cy="256" r="20" fill="#FFD700"/>
+  <circle cx="256" cy="96" r="20" fill="#FFD700"/>
+  <circle cx="164" cy="164" r="20" fill="#FFD700"/>
+  <circle cx="348" cy="348" r="20" fill="#FFD700"/>
 </svg>
