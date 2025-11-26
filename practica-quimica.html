@@ -1,0 +1,2263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica de Química Inorgánica - 4º ESO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 95%;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 25px;
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 1.8em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 12px 18px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .mode-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .exercise-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.3em;
+            color: #333;
+            text-align: center;
+            margin-bottom: 18px;
+            font-weight: bold;
+        }
+
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            display: inline-block;
+            font-size: 1.5em;
+            color: #764ba2;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            min-height: 50px;
+            min-width: 80px;
+            line-height: 50px;
+        }
+
+        .formula:empty::before {
+            content: "...";
+            color: #ccc;
+        }
+
+        .input-container {
+            margin-top: 20px;
+        }
+
+        .input-label {
+            font-size: 0.95em;
+            color: #555;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-hint {
+            font-size: 0.8em;
+            color: #999;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .answer-group {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .answer-label {
+            font-size: 0.85em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        input[type="text"].correct {
+            border-color: #10b981;
+            background: #d1fae5;
+        }
+
+        input[type="text"].incorrect {
+            border-color: #ef4444;
+            background: #fee2e2;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 24px;
+            font-size: 0.95em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .check-btn {
+            background: #10b981;
+            color: white;
+        }
+
+        .check-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .skip-btn {
+            background: #6b7280;
+            color: white;
+        }
+
+        .skip-btn:hover {
+            background: #4b5563;
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feedback.correct {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            color: #065f46;
+        }
+
+        .feedback.incorrect {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .feedback-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .feedback-explanation {
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 4px;
+            font-size: 0.85em;
+        }
+
+        sub {
+            font-size: 0.7em;
+        }
+
+        sup {
+            font-size: 0.7em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚗️ Química Inorgánica</h1>
+        <p class="subtitle">Practica nomenclatura y fórmulas de 4º ESO</p>
+
+        <div class="mode-selector">
+            <button class="mode-btn active" onclick="setMode('formula-to-name', this)">
+                Fórmula → Nomenclatura
+            </button>
+            <button class="mode-btn" onclick="setMode('name-to-formula', this)">
+                Nomenclatura → Fórmula
+            </button>
+        </div>
+
+        <div class="exercise-container">
+            <div class="question" id="question">¿Cómo se llama este compuesto?</div>
+            <div style="text-align: center;">
+                <span class="formula" id="formula"></span>
+            </div>
+
+            <div class="input-container">
+                <label class="input-label" id="input-label">Escribe todas las nomenclaturas:</label>
+                <p class="input-hint" id="input-hint">
+                    Puedes usar números (2, 3, 4...) como prefijos y +/- para iones
+                </p>
+                <div id="answers-container">
+                    <!-- Los inputs se generarán dinámicamente aquí -->
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="check-btn" onclick="checkAnswer()">Comprobar</button>
+                <button class="skip-btn" onclick="nextExercise()">Siguiente</button>
+            </div>
+
+            <div class="feedback" id="feedback">
+                <div class="feedback-title" id="feedback-title"></div>
+                <div class="feedback-explanation" id="feedback-explanation"></div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="correct-count">0</div>
+                <div class="stat-label">Correctas</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="total-count">0</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="percentage">0%</div>
+                <div class="stat-label">Aciertos</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos COMPLETA de compuestos de química inorgánica 4º ESO
+        const compounds = [
+            // ========================================
+            // 1. SUSTANCIAS SIMPLES - ELEMENTOS E IONES
+            // ========================================
+            {
+                formula: 'O₂',
+                nameStock: 'oxígeno',
+                nameSistematic: 'dioxígeno',
+                type: 'sustancia simple',
+                elements: [
+                    { symbol: 'O', name: 'oxígeno', oxidation: '0', count: 2 }
+                ],
+                explanation: 'El oxígeno molecular es una sustancia simple formada por 2 átomos de oxígeno. Estado de oxidación 0 porque es un elemento sin combinar.'
+            },
+            {
+                formula: 'H₂',
+                nameStock: 'hidrógeno',
+                nameSistematic: 'dihidrógeno',
+                type: 'sustancia simple',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '0', count: 2 }
+                ],
+                explanation: 'El hidrógeno molecular es una molécula diatómica. Estado de oxidación 0 por ser elemento puro.'
+            },
+            {
+                formula: 'N₂',
+                nameStock: 'nitrógeno',
+                nameSistematic: 'dinitrógeno',
+                type: 'sustancia simple',
+                elements: [
+                    { symbol: 'N', name: 'nitrógeno', oxidation: '0', count: 2 }
+                ],
+                explanation: 'El nitrógeno molecular forma el 78% del aire. Estado de oxidación 0 como elemento puro.'
+            },
+            {
+                formula: 'Cl₂',
+                nameStock: 'cloro',
+                nameSistematic: 'dicloro',
+                type: 'sustancia simple',
+                elements: [
+                    { symbol: 'Cl', name: 'cloro', oxidation: '0', count: 2 }
+                ],
+                explanation: 'El cloro es un gas diatómico amarillo-verdoso muy reactivo. Estado de oxidación 0.'
+            },
+
+            // ========================================
+            // 2. COMPUESTOS BINARIOS - ÓXIDOS METÁLICOS
+            // ========================================
+            // ÓXIDOS METÁLICOS - Más completos
+            {
+                formula: 'Li₂O',
+                nameStock: 'óxido de litio',
+                nameSistematic: 'monóxido de dilitio',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Li', name: 'litio', oxidation: '+1', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'El litio (grupo 1) siempre actúa con valencia +1. Necesitamos 2 átomos de Li para equilibrar 1 de O: 2×(+1) + (-2) = 0.'
+            },
+            {
+                formula: 'Na₂O',
+                nameStock: 'óxido de sodio',
+                nameSistematic: 'monóxido de disodio',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Na', name: 'sodio', oxidation: '+1', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'El sodio siempre actúa con valencia +1 y el oxígeno con -2. Para neutralizar las cargas, necesitamos 2 átomos de sodio (2×+1=+2) y 1 de oxígeno (-2). Por eso la fórmula es Na₂O.'
+            },
+            {
+                formula: 'K₂O',
+                nameStock: 'óxido de potasio',
+                nameSistematic: 'monóxido de dipotasio',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'K', name: 'potasio', oxidation: '+1', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'El potasio (grupo 1) tiene valencia +1. Se necesitan 2 átomos de K para equilibrar 1 de O.'
+            },
+            {
+                formula: 'MgO',
+                nameStock: 'óxido de magnesio',
+                nameSistematic: 'monóxido de magnesio',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Mg', name: 'magnesio', oxidation: '+2', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'El magnesio (grupo 2) tiene valencia +2, que se equilibra perfectamente con el oxígeno (-2) en proporción 1:1.'
+            },
+            {
+                formula: 'CaO',
+                nameStock: 'óxido de calcio',
+                nameSistematic: 'monóxido de calcio',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Ca', name: 'calcio', oxidation: '+2', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'El calcio actúa con valencia +2 y el oxígeno con -2. Como ambas cargas son iguales en valor, se neutralizan con 1 átomo de cada elemento. La fórmula es CaO (sin subíndices).'
+            },
+            {
+                formula: 'Al₂O₃',
+                nameStock: 'óxido de aluminio',
+                nameSistematic: 'trióxido de dialuminio',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Al', name: 'aluminio', oxidation: '+3', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'El aluminio actúa con valencia +3 y el oxígeno con -2. Usamos el método del mínimo común múltiplo: MCM(3,2)=6. Necesitamos 2 átomos de Al (2×3=6) y 3 de O (3×2=6) para equilibrar. Fórmula: Al₂O₃.'
+            },
+            {
+                formula: 'Fe₂O₃',
+                nameStock: 'óxido de hierro (III)',
+                nameSistematic: 'trióxido de dihierro',
+                nameTraditional: 'óxido férrico',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Fe', name: 'hierro', oxidation: '+3', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'El hierro puede actuar con valencia +2 o +3. En este caso usa +3. Para equilibrar con oxígeno (-2), necesitamos 2 átomos de Fe (2×3=6) y 3 de O (3×2=6). El (III) indica que el hierro está en estado de oxidación +3.'
+            },
+            {
+                formula: 'FeO',
+                nameStock: 'óxido de hierro (II)',
+                nameSistematic: 'monóxido de hierro',
+                nameTraditional: 'óxido ferroso',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Fe', name: 'hierro', oxidation: '+2', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'Aquí el hierro usa valencia +2. Con oxígeno (-2), las cargas se equilibran con 1 átomo de cada. Fórmula: FeO. El (II) indica valencia +2. Tradicionalmente se llama "ferroso" (menor valencia) frente a "férrico" (mayor valencia).'
+            },
+            {
+                formula: 'CuO',
+                nameStock: 'óxido de cobre (II)',
+                nameSistematic: 'monóxido de cobre',
+                nameTraditional: 'óxido cúprico',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Cu', name: 'cobre', oxidation: '+2', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'El cobre en estado +2 se equilibra directamente con el oxígeno (-2). Por eso no necesitamos subíndices. El (II) nos dice que el cobre actúa con valencia +2.'
+            },
+            {
+                formula: 'Cu₂O',
+                nameStock: 'óxido de cobre (I)',
+                nameSistematic: 'monóxido de dicobre',
+                nameTraditional: 'óxido cuproso',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Cu', name: 'cobre', oxidation: '+1', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'Cuando el cobre actúa con valencia +1, necesitamos 2 átomos de Cu (2×1=2) para equilibrar 1 de oxígeno (-2). Fórmula: Cu₂O. El (I) indica valencia +1.'
+            },
+
+            // Óxidos no metálicos
+            {
+                formula: 'CO₂',
+                nameStock: 'óxido de carbono (IV)',
+                nameSistematic: 'dióxido de carbono',
+                nameTraditional: 'anhídrido carbónico',
+                type: 'óxido no metálico',
+                elements: [
+                    { symbol: 'C', name: 'carbono', oxidation: '+4', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 2 }
+                ],
+                explanation: 'El carbono actúa con estado de oxidación +4. Para equilibrar con oxígeno (-2), necesitamos 2 átomos de O (2×-2=-4). En nomenclatura sistemática usamos prefijos: "di"óxido significa 2 oxígenos.'
+            },
+            {
+                formula: 'CO',
+                nameStock: 'óxido de carbono (II)',
+                nameSistematic: 'monóxido de carbono',
+                type: 'óxido no metálico',
+                elements: [
+                    { symbol: 'C', name: 'carbono', oxidation: '+2', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'Aquí el carbono usa estado de oxidación +2. Las cargas se equilibran con 1 átomo de cada elemento. "Mono"óxido indica 1 átomo de oxígeno.'
+            },
+            {
+                formula: 'SO₂',
+                nameStock: 'óxido de azufre (IV)',
+                nameSistematic: 'dióxido de azufre',
+                nameTraditional: 'anhídrido sulfuroso',
+                type: 'óxido no metálico',
+                elements: [
+                    { symbol: 'S', name: 'azufre', oxidation: '+4', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 2 }
+                ],
+                explanation: 'El azufre en estado +4 necesita 2 oxígenos (-2 cada uno) para equilibrar: +4 + 2×(-2) = 0. "Di"óxido = 2 oxígenos.'
+            },
+            {
+                formula: 'SO₃',
+                nameStock: 'óxido de azufre (VI)',
+                nameSistematic: 'trióxido de azufre',
+                nameTraditional: 'anhídrido sulfúrico',
+                type: 'óxido no metálico',
+                elements: [
+                    { symbol: 'S', name: 'azufre', oxidation: '+6', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'El azufre en estado +6 necesita 3 oxígenos: +6 + 3×(-2) = 0. "Tri"óxido = 3 oxígenos. El (VI) indica estado de oxidación +6.'
+            },
+            {
+                formula: 'N₂O',
+                nameStock: 'óxido de nitrógeno (I)',
+                nameSistematic: 'monóxido de dinitrógeno',
+                nameTraditional: 'óxido nitroso',
+                type: 'óxido no metálico',
+                elements: [
+                    { symbol: 'N', name: 'nitrógeno', oxidation: '+1', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'Nitrógeno con estado +1: necesitamos 2 átomos de N (2×1=2) para 1 de O (-2). En sistemática: "mono"óxido (1 oxígeno) de "di"nitrógeno (2 nitrógenos).'
+            },
+            {
+                formula: 'NO₂',
+                nameStock: 'óxido de nitrógeno (IV)',
+                nameSistematic: 'dióxido de nitrógeno',
+                type: 'óxido no metálico',
+                elements: [
+                    { symbol: 'N', name: 'nitrógeno', oxidation: '+4', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 2 }
+                ],
+                explanation: 'Nitrógeno en estado +4 con 2 oxígenos (-2 cada uno): +4 + 2×(-2) = 0. "Di"óxido indica 2 oxígenos.'
+            },
+
+            // Hidruros metálicos
+            {
+                formula: 'NaH',
+                nameStock: 'hidruro de sodio',
+                nameSistematic: 'hidruro de sodio',
+                type: 'hidruro metálico',
+                elements: [
+                    { symbol: 'Na', name: 'sodio', oxidation: '+1', count: 1 },
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '-1', count: 1 }
+                ],
+                explanation: 'En los hidruros metálicos, el hidrógeno actúa con valencia -1. El sodio con +1 se equilibra directamente: +1 + (-1) = 0. Fórmula: NaH.'
+            },
+            {
+                formula: 'CaH₂',
+                nameStock: 'hidruro de calcio',
+                nameSistematic: 'dihidruro de calcio',
+                type: 'hidruro metálico',
+                elements: [
+                    { symbol: 'Ca', name: 'calcio', oxidation: '+2', count: 1 },
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '-1', count: 2 }
+                ],
+                explanation: 'Calcio con valencia +2 necesita 2 hidrógenos con -1 cada uno para equilibrar: +2 + 2×(-1) = 0. Fórmula: CaH₂.'
+            },
+            {
+                formula: 'AlH₃',
+                nameStock: 'hidruro de aluminio',
+                nameSistematic: 'trihidruro de aluminio',
+                type: 'hidruro metálico',
+                elements: [
+                    { symbol: 'Al', name: 'aluminio', oxidation: '+3', count: 1 },
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '-1', count: 3 }
+                ],
+                explanation: 'Aluminio con valencia +3 necesita 3 hidrógenos (-1 cada uno): +3 + 3×(-1) = 0. "Tri"hidruro = 3 hidrógenos.'
+            },
+
+            // Hidruros no metálicos (hidrácidos)
+            {
+                formula: 'HCl',
+                nameStock: 'cloruro de hidrógeno',
+                nameSistematic: 'cloruro de hidrógeno',
+                nameAcid: 'ácido clorhídrico',
+                type: 'hidrácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 1 },
+                    { symbol: 'Cl', name: 'cloro', oxidation: '-1', count: 1 }
+                ],
+                explanation: 'En hidruros no metálicos, el hidrógeno actúa con +1. El cloro con -1 se equilibra directamente. En disolución acuosa se llama "ácido clorhídrico", pero como sustancia pura es "cloruro de hidrógeno".'
+            },
+            {
+                formula: 'HF',
+                nameStock: 'fluoruro de hidrógeno',
+                nameSistematic: 'fluoruro de hidrógeno',
+                nameAcid: 'ácido fluorhídrico',
+                type: 'hidrácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 1 },
+                    { symbol: 'F', name: 'flúor', oxidation: '-1', count: 1 }
+                ],
+                explanation: 'Hidrógeno (+1) y flúor (-1) se equilibran en proporción 1:1. En agua forma el ácido fluorhídrico.'
+            },
+            {
+                formula: 'H₂S',
+                nameStock: 'sulfuro de hidrógeno',
+                nameSistematic: 'sulfuro de dihidrógeno',
+                nameAcid: 'ácido sulfhídrico',
+                type: 'hidrácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 2 },
+                    { symbol: 'S', name: 'azufre', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'El azufre actúa con valencia -2, por lo que necesitamos 2 hidrógenos (+1 cada uno): 2×(+1) + (-2) = 0. En agua es el ácido sulfhídrico.'
+            },
+
+            // Sales binarias
+            {
+                formula: 'NaCl',
+                nameStock: 'cloruro de sodio',
+                nameSistematic: 'cloruro de sodio',
+                type: 'sal binaria',
+                elements: [
+                    { symbol: 'Na', name: 'sodio', oxidation: '+1', count: 1 },
+                    { symbol: 'Cl', name: 'cloro', oxidation: '-1', count: 1 }
+                ],
+                explanation: 'Sal formada por metal (Na) y no metal (Cl). El sodio con +1 y el cloro con -1 se equilibran directamente. Es la sal común de mesa.'
+            },
+            {
+                formula: 'KBr',
+                nameStock: 'bromuro de potasio',
+                nameSistematic: 'bromuro de potasio',
+                type: 'sal binaria',
+                elements: [
+                    { symbol: 'K', name: 'potasio', oxidation: '+1', count: 1 },
+                    { symbol: 'Br', name: 'bromo', oxidation: '-1', count: 1 }
+                ],
+                explanation: 'El potasio (+1) se combina con bromo (-1) en proporción 1:1. El no metal (bromo) cambia su terminación a "-uro": bromuro.'
+            },
+            {
+                formula: 'CaF₂',
+                nameStock: 'fluoruro de calcio',
+                nameSistematic: 'difluoruro de calcio',
+                type: 'sal binaria',
+                elements: [
+                    { symbol: 'Ca', name: 'calcio', oxidation: '+2', count: 1 },
+                    { symbol: 'F', name: 'flúor', oxidation: '-1', count: 2 }
+                ],
+                explanation: 'El calcio con valencia +2 necesita 2 átomos de flúor (-1 cada uno) para equilibrar: +2 + 2×(-1) = 0. Fórmula: CaF₂.'
+            },
+            {
+                formula: 'FeCl₃',
+                nameStock: 'cloruro de hierro (III)',
+                nameSistematic: 'tricloruro de hierro',
+                nameTraditional: 'cloruro férrico',
+                type: 'sal binaria',
+                elements: [
+                    { symbol: 'Fe', name: 'hierro', oxidation: '+3', count: 1 },
+                    { symbol: 'Cl', name: 'cloro', oxidation: '-1', count: 3 }
+                ],
+                explanation: 'El hierro en estado +3 necesita 3 cloros (-1 cada uno): +3 + 3×(-1) = 0. El (III) indica la valencia del hierro. "Tri"cloruro = 3 cloros.'
+            },
+            {
+                formula: 'FeCl₂',
+                nameStock: 'cloruro de hierro (II)',
+                nameSistematic: 'dicloruro de hierro',
+                nameTraditional: 'cloruro ferroso',
+                type: 'sal binaria',
+                elements: [
+                    { symbol: 'Fe', name: 'hierro', oxidation: '+2', count: 1 },
+                    { symbol: 'Cl', name: 'cloro', oxidation: '-1', count: 2 }
+                ],
+                explanation: 'El hierro con valencia +2 necesita 2 cloros: +2 + 2×(-1) = 0. El (II) indica valencia +2. "Di"cloruro = 2 cloros.'
+            },
+
+            // Hidróxidos
+            {
+                formula: 'NaOH',
+                nameStock: 'hidróxido de sodio',
+                nameSistematic: 'hidróxido de sodio',
+                type: 'hidróxido',
+                elements: [
+                    { symbol: 'Na', name: 'sodio', oxidation: '+1', count: 1 },
+                    { symbol: 'OH', name: 'hidróxido', oxidation: '-1', count: 1 }
+                ],
+                explanation: 'Los hidróxidos contienen el grupo OH⁻ (con carga -1). El sodio con +1 necesita un solo grupo OH⁻. Es la sosa cáustica.'
+            },
+            {
+                formula: 'Ca(OH)₂',
+                nameStock: 'hidróxido de calcio',
+                nameSistematic: 'dihidróxido de calcio',
+                type: 'hidróxido',
+                elements: [
+                    { symbol: 'Ca', name: 'calcio', oxidation: '+2', count: 1 },
+                    { symbol: 'OH', name: 'hidróxido', oxidation: '-1', count: 2 }
+                ],
+                explanation: 'El calcio con valencia +2 necesita 2 grupos OH⁻ (cada uno con -1): +2 + 2×(-1) = 0. Se usan paréntesis cuando hay más de un grupo OH: Ca(OH)₂. Es la cal apagada.'
+            },
+            {
+                formula: 'Al(OH)₃',
+                nameStock: 'hidróxido de aluminio',
+                nameSistematic: 'trihidróxido de aluminio',
+                type: 'hidróxido',
+                elements: [
+                    { symbol: 'Al', name: 'aluminio', oxidation: '+3', count: 1 },
+                    { symbol: 'OH', name: 'hidróxido', oxidation: '-1', count: 3 }
+                ],
+                explanation: 'El aluminio con valencia +3 necesita 3 grupos OH⁻: +3 + 3×(-1) = 0. El paréntesis agrupa el OH: Al(OH)₃.'
+            },
+            {
+                formula: 'Fe(OH)₃',
+                nameStock: 'hidróxido de hierro (III)',
+                nameSistematic: 'trihidróxido de hierro',
+                nameTraditional: 'hidróxido férrico',
+                type: 'hidróxido',
+                elements: [
+                    { symbol: 'Fe', name: 'hierro', oxidation: '+3', count: 1 },
+                    { symbol: 'OH', name: 'hidróxido', oxidation: '-1', count: 3 }
+                ],
+                explanation: 'Hierro en estado +3 con 3 grupos OH⁻: +3 + 3×(-1) = 0. El (III) indica que el hierro actúa con valencia +3.'
+            },
+
+            // Oxoácidos y oxisales comunes
+            {
+                formula: 'H₂SO₄',
+                nameStock: 'tetraoxosulfato (VI) de hidrógeno',
+                nameSistematic: 'tetraoxosulfato (VI) de hidrógeno',
+                nameTraditional: 'ácido sulfúrico',
+                type: 'oxoácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 2 },
+                    { symbol: 'S', name: 'azufre', oxidation: '+6', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 4 }
+                ],
+                explanation: 'Oxoácido formado por H, S y O. El azufre actúa con estado +6. Suma de oxidaciones: 2×(+1) + 1×(+6) + 4×(-2) = +2 +6 -8 = 0. "Tetra"oxo = 4 oxígenos, (VI) = estado de oxidación del azufre.'
+            },
+            {
+                formula: 'HNO₃',
+                nameStock: 'trioxonitrato (V) de hidrógeno',
+                nameSistematic: 'trioxonitrato (V) de hidrógeno',
+                nameTraditional: 'ácido nítrico',
+                type: 'oxoácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 1 },
+                    { symbol: 'N', name: 'nitrógeno', oxidation: '+5', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'El nitrógeno con estado +5. Suma: 1×(+1) + 1×(+5) + 3×(-2) = +1 +5 -6 = 0. "Tri"oxo = 3 oxígenos, (V) = estado del nitrógeno.'
+            },
+            {
+                formula: 'H₂CO₃',
+                nameStock: 'trioxocarbonato (IV) de hidrógeno',
+                nameSistematic: 'trioxocarbonato (IV) de hidrógeno',
+                nameTraditional: 'ácido carbónico',
+                type: 'oxoácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 2 },
+                    { symbol: 'C', name: 'carbono', oxidation: '+4', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'Carbono con estado +4. Suma: 2×(+1) + 1×(+4) + 3×(-2) = +2 +4 -6 = 0. "Tri"oxo = 3 oxígenos, (IV) = estado del carbono.'
+            },
+            {
+                formula: 'Na₂SO₄',
+                nameStock: 'sulfato de sodio',
+                nameSistematic: 'tetraoxosulfato (VI) de sodio',
+                nameTraditional: 'sulfato de sodio',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'Na', name: 'sodio', oxidation: '+1', count: 2 },
+                    { symbol: 'S', name: 'azufre', oxidation: '+6', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 4 }
+                ],
+                explanation: 'Oxisal derivada del H₂SO₄. Se sustituyen los 2 hidrógenos por 2 sodios. El grupo SO₄ tiene carga -2, por eso necesitamos 2 sodios (+1 cada uno) para equilibrar: 2×(+1) = +2.'
+            },
+            {
+                formula: 'CaCO₃',
+                nameStock: 'carbonato de calcio',
+                nameSistematic: 'trioxocarbonato (IV) de calcio',
+                nameTraditional: 'carbonato de calcio',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'Ca', name: 'calcio', oxidation: '+2', count: 1 },
+                    { symbol: 'C', name: 'carbono', oxidation: '+4', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'Derivada del H₂CO₃. El grupo CO₃ tiene carga -2, que se equilibra perfectamente con el calcio (+2). Es el componente principal de la piedra caliza y el mármol.'
+            },
+            {
+                formula: 'KNO₃',
+                nameStock: 'nitrato de potasio',
+                nameSistematic: 'trioxonitrato (V) de potasio',
+                nameTraditional: 'nitrato de potasio',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'K', name: 'potasio', oxidation: '+1', count: 1 },
+                    { symbol: 'N', name: 'nitrógeno', oxidation: '+5', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'Derivada del HNO₃. El grupo NO₃ tiene carga -1, que se equilibra con el potasio (+1). Es el salitre, usado en fertilizantes y pólvora.'
+            },
+
+            // ========================================
+            // MÁS ÓXIDOS METÁLICOS
+            // ========================================
+            {
+                formula: 'BaO',
+                nameStock: 'óxido de bario',
+                nameSistematic: 'monóxido de bario',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Ba', name: 'bario', oxidation: '+2', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'El bario (grupo 2) tiene valencia +2. Se equilibra directamente con oxígeno (-2).'
+            },
+            {
+                formula: 'ZnO',
+                nameStock: 'óxido de cinc',
+                nameSistematic: 'monóxido de cinc',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Zn', name: 'cinc', oxidation: '+2', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'El cinc normalmente actúa con valencia +2. Se usa en cremas solares como protector UV.'
+            },
+            {
+                formula: 'Ag₂O',
+                nameStock: 'óxido de plata',
+                nameSistematic: 'monóxido de diplata',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Ag', name: 'plata', oxidation: '+1', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'La plata típicamente usa valencia +1. Necesitamos 2 átomos de Ag para 1 de O.'
+            },
+            {
+                formula: 'PbO',
+                nameStock: 'óxido de plomo (II)',
+                nameSistematic: 'monóxido de plomo',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Pb', name: 'plomo', oxidation: '+2', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'El plomo puede actuar con +2 o +4. Aquí usa +2.'
+            },
+            {
+                formula: 'PbO₂',
+                nameStock: 'óxido de plomo (IV)',
+                nameSistematic: 'dióxido de plomo',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Pb', name: 'plomo', oxidation: '+4', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 2 }
+                ],
+                explanation: 'Aquí el plomo usa valencia +4. Necesita 2 oxígenos: +4 + 2×(-2) = 0.'
+            },
+            {
+                formula: 'SnO',
+                nameStock: 'óxido de estaño (II)',
+                nameSistematic: 'monóxido de estaño',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Sn', name: 'estaño', oxidation: '+2', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'El estaño puede tener valencia +2 o +4. Aquí usa +2.'
+            },
+            {
+                formula: 'SnO₂',
+                nameStock: 'óxido de estaño (IV)',
+                nameSistematic: 'dióxido de estaño',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Sn', name: 'estaño', oxidation: '+4', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 2 }
+                ],
+                explanation: 'Estaño con valencia +4. Necesita 2 oxígenos para equilibrar.'
+            },
+            {
+                formula: 'Ni₂O₃',
+                nameStock: 'óxido de níquel (III)',
+                nameSistematic: 'trióxido de diníquel',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Ni', name: 'níquel', oxidation: '+3', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'El níquel en estado +3. MCM(3,2)=6: 2 átomos de Ni (2×3=6) y 3 de O (3×2=6).'
+            },
+            {
+                formula: 'Cr₂O₃',
+                nameStock: 'óxido de cromo (III)',
+                nameSistematic: 'trióxido de dicromo',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Cr', name: 'cromo', oxidation: '+3', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'El cromo puede tener varias valencias. Aquí usa +3. Es un pigmento verde.'
+            },
+            {
+                formula: 'MnO₂',
+                nameStock: 'óxido de manganeso (IV)',
+                nameSistematic: 'dióxido de manganeso',
+                type: 'óxido metálico',
+                elements: [
+                    { symbol: 'Mn', name: 'manganeso', oxidation: '+4', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 2 }
+                ],
+                explanation: 'El manganeso con valencia +4. Se usa en pilas y baterías.'
+            },
+
+            // ========================================
+            // MÁS ÓXIDOS NO METÁLICOS
+            // ========================================
+            {
+                formula: 'P₂O₃',
+                nameStock: 'óxido de fósforo (III)',
+                nameSistematic: 'trióxido de difósforo',
+                nameTraditional: 'anhídrido fosforoso',
+                type: 'óxido no metálico',
+                elements: [
+                    { symbol: 'P', name: 'fósforo', oxidation: '+3', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'Fósforo con estado +3. MCM(3,2)=6: 2 P (2×3=6) y 3 O (3×2=6).'
+            },
+            {
+                formula: 'P₂O₅',
+                nameStock: 'óxido de fósforo (V)',
+                nameSistematic: 'pentaóxido de difósforo',
+                nameTraditional: 'anhídrido fosfórico',
+                type: 'óxido no metálico',
+                elements: [
+                    { symbol: 'P', name: 'fósforo', oxidation: '+5', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 5 }
+                ],
+                explanation: 'Fósforo con estado +5. Se necesitan 5 oxígenos para equilibrar 2 fósforos.'
+            },
+            {
+                formula: 'Cl₂O',
+                nameStock: 'óxido de cloro (I)',
+                nameSistematic: 'monóxido de dicloro',
+                type: 'óxido no metálico',
+                elements: [
+                    { symbol: 'Cl', name: 'cloro', oxidation: '+1', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'El cloro puede formar óxidos. Aquí usa estado +1: 2 Cl para 1 O.'
+            },
+            {
+                formula: 'Cl₂O₇',
+                nameStock: 'óxido de cloro (VII)',
+                nameSistematic: 'heptaóxido de dicloro',
+                type: 'óxido no metálico',
+                elements: [
+                    { symbol: 'Cl', name: 'cloro', oxidation: '+7', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 7 }
+                ],
+                explanation: 'Cloro en su máximo estado de oxidación (+7). Necesita 7 oxígenos.'
+            },
+            {
+                formula: 'N₂O₃',
+                nameStock: 'óxido de nitrógeno (III)',
+                nameSistematic: 'trióxido de dinitrógeno',
+                type: 'óxido no metálico',
+                elements: [
+                    { symbol: 'N', name: 'nitrógeno', oxidation: '+3', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'Nitrógeno con estado +3. Necesita 3 oxígenos para 2 nitrógenos.'
+            },
+            {
+                formula: 'N₂O₅',
+                nameStock: 'óxido de nitrógeno (V)',
+                nameSistematic: 'pentaóxido de dinitrógeno',
+                type: 'óxido no metálico',
+                elements: [
+                    { symbol: 'N', name: 'nitrógeno', oxidation: '+5', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 5 }
+                ],
+                explanation: 'Nitrógeno en estado +5. Se requieren 5 oxígenos.'
+            },
+            {
+                formula: 'SeO₂',
+                nameStock: 'óxido de selenio (IV)',
+                nameSistematic: 'dióxido de selenio',
+                type: 'óxido no metálico',
+                elements: [
+                    { symbol: 'Se', name: 'selenio', oxidation: '+4', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 2 }
+                ],
+                explanation: 'El selenio (mismo grupo que el azufre) con estado +4.'
+            },
+
+            // ========================================
+            // PERÓXIDOS
+            // ========================================
+            {
+                formula: 'H₂O₂',
+                nameStock: 'peróxido de hidrógeno',
+                nameSistematic: 'dióxido de dihidrógeno',
+                type: 'peróxido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-1', count: 2 }
+                ],
+                explanation: 'En peróxidos, el oxígeno tiene estado de oxidación -1 (no -2). El agua oxigenada es la disolución acuosa de este compuesto.'
+            },
+            {
+                formula: 'Na₂O₂',
+                nameStock: 'peróxido de sodio',
+                nameSistematic: 'dióxido de disodio',
+                type: 'peróxido',
+                elements: [
+                    { symbol: 'Na', name: 'sodio', oxidation: '+1', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-1', count: 2 }
+                ],
+                explanation: 'Peróxido metálico. El oxígeno actúa con -1. Se necesitan 2 Na (+1) para 2 O (-1).'
+            },
+            {
+                formula: 'CaO₂',
+                nameStock: 'peróxido de calcio',
+                nameSistematic: 'dióxido de calcio',
+                type: 'peróxido',
+                elements: [
+                    { symbol: 'Ca', name: 'calcio', oxidation: '+2', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-1', count: 2 }
+                ],
+                explanation: 'El calcio (+2) con 2 oxígenos en estado -1 cada uno: +2 + 2×(-1) = 0.'
+            },
+
+            // ========================================
+            // MÁS HIDRUROS METÁLICOS
+            // ========================================
+            {
+                formula: 'LiH',
+                nameStock: 'hidruro de litio',
+                nameSistematic: 'hidruro de litio',
+                type: 'hidruro metálico',
+                elements: [
+                    { symbol: 'Li', name: 'litio', oxidation: '+1', count: 1 },
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '-1', count: 1 }
+                ],
+                explanation: 'En hidruros metálicos, el H actúa con -1. El litio (+1) se equilibra directamente.'
+            },
+            {
+                formula: 'KH',
+                nameStock: 'hidruro de potasio',
+                nameSistematic: 'hidruro de potasio',
+                type: 'hidruro metálico',
+                elements: [
+                    { symbol: 'K', name: 'potasio', oxidation: '+1', count: 1 },
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '-1', count: 1 }
+                ],
+                explanation: 'Potasio (+1) con hidrógeno (-1) en proporción 1:1.'
+            },
+            {
+                formula: 'MgH₂',
+                nameStock: 'hidruro de magnesio',
+                nameSistematic: 'dihidruro de magnesio',
+                type: 'hidruro metálico',
+                elements: [
+                    { symbol: 'Mg', name: 'magnesio', oxidation: '+2', count: 1 },
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '-1', count: 2 }
+                ],
+                explanation: 'Magnesio (+2) necesita 2 hidrógenos (-1 cada uno) para equilibrar.'
+            },
+            {
+                formula: 'FeH₃',
+                nameStock: 'hidruro de hierro (III)',
+                nameSistematic: 'trihidruro de hierro',
+                type: 'hidruro metálico',
+                elements: [
+                    { symbol: 'Fe', name: 'hierro', oxidation: '+3', count: 1 },
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '-1', count: 3 }
+                ],
+                explanation: 'Hierro con valencia +3 necesita 3 hidrógenos (-1): +3 + 3×(-1) = 0.'
+            },
+
+            // ========================================
+            // MÁS HIDRUROS NO METÁLICOS
+            // ========================================
+            {
+                formula: 'HBr',
+                nameStock: 'bromuro de hidrógeno',
+                nameSistematic: 'bromuro de hidrógeno',
+                nameAcid: 'ácido bromhídrico',
+                type: 'hidrácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 1 },
+                    { symbol: 'Br', name: 'bromo', oxidation: '-1', count: 1 }
+                ],
+                explanation: 'Hidrácido del bromo. En disolución acuosa es el ácido bromhídrico.'
+            },
+            {
+                formula: 'HI',
+                nameStock: 'yoduro de hidrógeno',
+                nameSistematic: 'yoduro de hidrógeno',
+                nameAcid: 'ácido yodhídrico',
+                type: 'hidrácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 1 },
+                    { symbol: 'I', name: 'yodo', oxidation: '-1', count: 1 }
+                ],
+                explanation: 'Hidrácido del yodo. En agua forma el ácido yodhídrico.'
+            },
+            {
+                formula: 'NH₃',
+                nameStock: 'amoniaco',
+                nameSistematic: 'trihidruro de nitrógeno',
+                type: 'hidruro no metálico',
+                elements: [
+                    { symbol: 'N', name: 'nitrógeno', oxidation: '-3', count: 1 },
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 3 }
+                ],
+                explanation: 'Hidruro del nitrógeno. Es un gas con olor característico. Nitrógeno con -3, necesita 3 H con +1.'
+            },
+            {
+                formula: 'PH₃',
+                nameStock: 'fosfano',
+                nameSistematic: 'trihidruro de fósforo',
+                nameTraditional: 'fosfina',
+                type: 'hidruro no metálico',
+                elements: [
+                    { symbol: 'P', name: 'fósforo', oxidation: '-3', count: 1 },
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 3 }
+                ],
+                explanation: 'Hidruro del fósforo. Gas muy tóxico.'
+            },
+            {
+                formula: 'AsH₃',
+                nameStock: 'arsano',
+                nameSistematic: 'trihidruro de arsénico',
+                nameTraditional: 'arsina',
+                type: 'hidruro no metálico',
+                elements: [
+                    { symbol: 'As', name: 'arsénico', oxidation: '-3', count: 1 },
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 3 }
+                ],
+                explanation: 'Hidruro del arsénico. Extremadamente venenoso.'
+            },
+            {
+                formula: 'CH₄',
+                nameStock: 'metano',
+                nameSistematic: 'tetrahidruro de carbono',
+                type: 'hidruro no metálico',
+                elements: [
+                    { symbol: 'C', name: 'carbono', oxidation: '-4', count: 1 },
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 4 }
+                ],
+                explanation: 'El hidrocarburo más simple. Gas natural. Carbono con -4, necesita 4 H.'
+            },
+            {
+                formula: 'SiH₄',
+                nameStock: 'silano',
+                nameSistematic: 'tetrahidruro de silicio',
+                type: 'hidruro no metálico',
+                elements: [
+                    { symbol: 'Si', name: 'silicio', oxidation: '-4', count: 1 },
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 4 }
+                ],
+                explanation: 'Hidruro del silicio. Gas inflamable.'
+            },
+
+            // ========================================
+            // MÁS SALES BINARIAS (Metal + No metal)
+            // ========================================
+            {
+                formula: 'LiF',
+                nameStock: 'fluoruro de litio',
+                nameSistematic: 'fluoruro de litio',
+                type: 'sal binaria',
+                elements: [
+                    { symbol: 'Li', name: 'litio', oxidation: '+1', count: 1 },
+                    { symbol: 'F', name: 'flúor', oxidation: '-1', count: 1 }
+                ],
+                explanation: 'Sal simple. Litio (+1) con flúor (-1).'
+            },
+            {
+                formula: 'MgCl₂',
+                nameStock: 'cloruro de magnesio',
+                nameSistematic: 'dicloruro de magnesio',
+                type: 'sal binaria',
+                elements: [
+                    { symbol: 'Mg', name: 'magnesio', oxidation: '+2', count: 1 },
+                    { symbol: 'Cl', name: 'cloro', oxidation: '-1', count: 2 }
+                ],
+                explanation: 'Magnesio (+2) necesita 2 cloros (-1). Presente en el agua de mar.'
+            },
+            {
+                formula: 'AlCl₃',
+                nameStock: 'cloruro de aluminio',
+                nameSistematic: 'tricloruro de aluminio',
+                type: 'sal binaria',
+                elements: [
+                    { symbol: 'Al', name: 'aluminio', oxidation: '+3', count: 1 },
+                    { symbol: 'Cl', name: 'cloro', oxidation: '-1', count: 3 }
+                ],
+                explanation: 'Aluminio (+3) con 3 cloros (-1). Usado en catálisis.'
+            },
+            {
+                formula: 'CaS',
+                nameStock: 'sulfuro de calcio',
+                nameSistematic: 'sulfuro de calcio',
+                type: 'sal binaria',
+                elements: [
+                    { symbol: 'Ca', name: 'calcio', oxidation: '+2', count: 1 },
+                    { symbol: 'S', name: 'azufre', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'Calcio (+2) con azufre (-2). Se equilibran directamente.'
+            },
+            {
+                formula: 'FeS',
+                nameStock: 'sulfuro de hierro (II)',
+                nameSistematic: 'sulfuro de hierro',
+                nameTraditional: 'sulfuro ferroso',
+                type: 'sal binaria',
+                elements: [
+                    { symbol: 'Fe', name: 'hierro', oxidation: '+2', count: 1 },
+                    { symbol: 'S', name: 'azufre', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'Hierro con valencia +2 y azufre (-2).'
+            },
+            {
+                formula: 'Fe₂S₃',
+                nameStock: 'sulfuro de hierro (III)',
+                nameSistematic: 'trisulfuro de dihierro',
+                nameTraditional: 'sulfuro férrico',
+                type: 'sal binaria',
+                elements: [
+                    { symbol: 'Fe', name: 'hierro', oxidation: '+3', count: 2 },
+                    { symbol: 'S', name: 'azufre', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'Hierro (+3) con azufre (-2). MCM(3,2)=6: 2 Fe y 3 S.'
+            },
+            {
+                formula: 'AgCl',
+                nameStock: 'cloruro de plata',
+                nameSistematic: 'cloruro de plata',
+                type: 'sal binaria',
+                elements: [
+                    { symbol: 'Ag', name: 'plata', oxidation: '+1', count: 1 },
+                    { symbol: 'Cl', name: 'cloro', oxidation: '-1', count: 1 }
+                ],
+                explanation: 'Plata (+1) con cloro (-1). Es fotosensible, usado en fotografía.'
+            },
+            {
+                formula: 'ZnS',
+                nameStock: 'sulfuro de cinc',
+                nameSistematic: 'sulfuro de cinc',
+                type: 'sal binaria',
+                elements: [
+                    { symbol: 'Zn', name: 'cinc', oxidation: '+2', count: 1 },
+                    { symbol: 'S', name: 'azufre', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'Cinc (+2) con azufre (-2). Mineral conocido como blenda.'
+            },
+
+            // ========================================
+            // SALES VOLÁTILES (No metal + No metal)
+            // ========================================
+            {
+                formula: 'BrF₃',
+                nameStock: 'fluoruro de bromo (III)',
+                nameSistematic: 'trifluoruro de bromo',
+                type: 'sal volátil',
+                elements: [
+                    { symbol: 'Br', name: 'bromo', oxidation: '+3', count: 1 },
+                    { symbol: 'F', name: 'flúor', oxidation: '-1', count: 3 }
+                ],
+                explanation: 'Compuesto entre dos no metales. El más electronegativo (F) actúa como negativo.'
+            },
+            {
+                formula: 'SF₆',
+                nameStock: 'fluoruro de azufre (VI)',
+                nameSistematic: 'hexafluoruro de azufre',
+                type: 'sal volátil',
+                elements: [
+                    { symbol: 'S', name: 'azufre', oxidation: '+6', count: 1 },
+                    { symbol: 'F', name: 'flúor', oxidation: '-1', count: 6 }
+                ],
+                explanation: 'Gas muy estable. Azufre (+6) con 6 flúores (-1). Usado como aislante eléctrico.'
+            },
+            {
+                formula: 'ICl',
+                nameStock: 'cloruro de yodo (I)',
+                nameSistematic: 'cloruro de yodo',
+                type: 'sal volátil',
+                elements: [
+                    { symbol: 'I', name: 'yodo', oxidation: '+1', count: 1 },
+                    { symbol: 'Cl', name: 'cloro', oxidation: '-1', count: 1 }
+                ],
+                explanation: 'Entre dos halógenos, el más electronegativo (Cl) es negativo.'
+            },
+
+            // ========================================
+            // MÁS HIDRÓXIDOS
+            // ========================================
+            {
+                formula: 'LiOH',
+                nameStock: 'hidróxido de litio',
+                nameSistematic: 'hidróxido de litio',
+                type: 'hidróxido',
+                elements: [
+                    { symbol: 'Li', name: 'litio', oxidation: '+1', count: 1 },
+                    { symbol: 'OH', name: 'hidróxido', oxidation: '-1', count: 1 }
+                ],
+                explanation: 'Litio (+1) con un grupo OH⁻. Base fuerte.'
+            },
+            {
+                formula: 'KOH',
+                nameStock: 'hidróxido de potasio',
+                nameSistematic: 'hidróxido de potasio',
+                type: 'hidróxido',
+                elements: [
+                    { symbol: 'K', name: 'potasio', oxidation: '+1', count: 1 },
+                    { symbol: 'OH', name: 'hidróxido', oxidation: '-1', count: 1 }
+                ],
+                explanation: 'Potasio (+1) con OH⁻. Llamada potasa cáustica.'
+            },
+            {
+                formula: 'Mg(OH)₂',
+                nameStock: 'hidróxido de magnesio',
+                nameSistematic: 'dihidróxido de magnesio',
+                type: 'hidróxido',
+                elements: [
+                    { symbol: 'Mg', name: 'magnesio', oxidation: '+2', count: 1 },
+                    { symbol: 'OH', name: 'hidróxido', oxidation: '-1', count: 2 }
+                ],
+                explanation: 'Magnesio (+2) con 2 grupos OH⁻. Usado en antiácidos (leche de magnesia).'
+            },
+            {
+                formula: 'Ba(OH)₂',
+                nameStock: 'hidróxido de bario',
+                nameSistematic: 'dihidróxido de bario',
+                type: 'hidróxido',
+                elements: [
+                    { symbol: 'Ba', name: 'bario', oxidation: '+2', count: 1 },
+                    { symbol: 'OH', name: 'hidróxido', oxidation: '-1', count: 2 }
+                ],
+                explanation: 'Bario (+2) con 2 grupos OH⁻. Base fuerte.'
+            },
+            {
+                formula: 'Fe(OH)₂',
+                nameStock: 'hidróxido de hierro (II)',
+                nameSistematic: 'dihidróxido de hierro',
+                nameTraditional: 'hidróxido ferroso',
+                type: 'hidróxido',
+                elements: [
+                    { symbol: 'Fe', name: 'hierro', oxidation: '+2', count: 1 },
+                    { symbol: 'OH', name: 'hidróxido', oxidation: '-1', count: 2 }
+                ],
+                explanation: 'Hierro con valencia +2 y 2 grupos OH⁻.'
+            },
+            {
+                formula: 'Cu(OH)₂',
+                nameStock: 'hidróxido de cobre (II)',
+                nameSistematic: 'dihidróxido de cobre',
+                type: 'hidróxido',
+                elements: [
+                    { symbol: 'Cu', name: 'cobre', oxidation: '+2', count: 1 },
+                    { symbol: 'OH', name: 'hidróxido', oxidation: '-1', count: 2 }
+                ],
+                explanation: 'Cobre (+2) con 2 grupos OH⁻. Precipitado azul característico.'
+            },
+
+            // ========================================
+            // MÁS OXOÁCIDOS
+            // ========================================
+            {
+                formula: 'H₂SO₃',
+                nameStock: 'trioxosulfato (IV) de hidrógeno',
+                nameSistematic: 'trioxosulfato (IV) de hidrógeno',
+                nameTraditional: 'ácido sulfuroso',
+                type: 'oxoácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 2 },
+                    { symbol: 'S', name: 'azufre', oxidation: '+4', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'Azufre con estado +4. Suma: 2×(+1) + (+4) + 3×(-2) = 0. Ácido débil.'
+            },
+            {
+                formula: 'HNO₂',
+                nameStock: 'dioxonitrato (III) de hidrógeno',
+                nameSistematic: 'dioxonitrato (III) de hidrógeno',
+                nameTraditional: 'ácido nitroso',
+                type: 'oxoácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 1 },
+                    { symbol: 'N', name: 'nitrógeno', oxidation: '+3', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 2 }
+                ],
+                explanation: 'Nitrógeno con estado +3. Suma: (+1) + (+3) + 2×(-2) = 0.'
+            },
+            {
+                formula: 'HClO',
+                nameStock: 'oxoclorato (I) de hidrógeno',
+                nameSistematic: 'oxoclorato (I) de hidrógeno',
+                nameTraditional: 'ácido hipocloroso',
+                type: 'oxoácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 1 },
+                    { symbol: 'Cl', name: 'cloro', oxidation: '+1', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'Cloro con estado +1. Usado como desinfectante (lejía diluida).'
+            },
+            {
+                formula: 'HClO₂',
+                nameStock: 'dioxoclorato (III) de hidrógeno',
+                nameSistematic: 'dioxoclorato (III) de hidrógeno',
+                nameTraditional: 'ácido cloroso',
+                type: 'oxoácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 1 },
+                    { symbol: 'Cl', name: 'cloro', oxidation: '+3', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 2 }
+                ],
+                explanation: 'Cloro con estado +3. Suma: (+1) + (+3) + 2×(-2) = 0.'
+            },
+            {
+                formula: 'HClO₃',
+                nameStock: 'trioxoclorato (V) de hidrógeno',
+                nameSistematic: 'trioxoclorato (V) de hidrógeno',
+                nameTraditional: 'ácido clórico',
+                type: 'oxoácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 1 },
+                    { symbol: 'Cl', name: 'cloro', oxidation: '+5', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'Cloro con estado +5. Ácido fuerte.'
+            },
+            {
+                formula: 'HClO₄',
+                nameStock: 'tetraoxoclorato (VII) de hidrógeno',
+                nameSistematic: 'tetraoxoclorato (VII) de hidrógeno',
+                nameTraditional: 'ácido perclórico',
+                type: 'oxoácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 1 },
+                    { symbol: 'Cl', name: 'cloro', oxidation: '+7', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 4 }
+                ],
+                explanation: 'Cloro en máximo estado de oxidación (+7). Ácido muy fuerte.'
+            },
+            {
+                formula: 'H₃PO₄',
+                nameStock: 'tetraoxofosfato (V) de hidrógeno',
+                nameSistematic: 'tetraoxofosfato (V) de hidrógeno',
+                nameTraditional: 'ácido fosfórico',
+                type: 'oxoácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 3 },
+                    { symbol: 'P', name: 'fósforo', oxidation: '+5', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 4 }
+                ],
+                explanation: 'Fósforo con estado +5. Suma: 3×(+1) + (+5) + 4×(-2) = 0. Usado en fertilizantes y bebidas.'
+            },
+            {
+                formula: 'H₃PO₃',
+                nameStock: 'trioxofosfato (III) de hidrógeno',
+                nameSistematic: 'trioxofosfato (III) de hidrógeno',
+                nameTraditional: 'ácido fosforoso',
+                type: 'oxoácido',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 3 },
+                    { symbol: 'P', name: 'fósforo', oxidation: '+3', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'Fósforo con estado +3. Suma: 3×(+1) + (+3) + 3×(-2) = 0.'
+            },
+            {
+                formula: 'H₂Cr₂O₇',
+                nameStock: 'heptaoxodicromato (VI) de hidrógeno',
+                nameSistematic: 'heptaoxodicromato (VI) de hidrógeno',
+                nameTraditional: 'ácido dicrómico',
+                type: 'oxoácido complejo',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 2 },
+                    { symbol: 'Cr', name: 'cromo', oxidation: '+6', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 7 }
+                ],
+                explanation: 'Isopoliácido con 2 átomos de cromo. Suma: 2×(+1) + 2×(+6) + 7×(-2) = 0. Potente oxidante de color naranja.'
+            },
+            {
+                formula: 'H₂S₂O₇',
+                nameStock: 'heptaoxodisulfato (VI) de hidrógeno',
+                nameSistematic: 'heptaoxodisulfato (VI) de hidrógeno',
+                nameTraditional: 'ácido disulfúrico',
+                type: 'oxoácido complejo',
+                elements: [
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 2 },
+                    { symbol: 'S', name: 'azufre', oxidation: '+6', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 7 }
+                ],
+                explanation: 'Isopoliácido con 2 átomos de azufre. También llamado ácido pirosulfúrico u óleum.'
+            },
+
+            // ========================================
+            // MÁS OXOSALES
+            // ========================================
+            {
+                formula: 'Na₂SO₃',
+                nameStock: 'sulfito de sodio',
+                nameSistematic: 'trioxosulfato (IV) de sodio',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'Na', name: 'sodio', oxidation: '+1', count: 2 },
+                    { symbol: 'S', name: 'azufre', oxidation: '+4', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'Derivada del H₂SO₃. El grupo SO₃ tiene carga -2, neutralizada con 2 Na⁺.'
+            },
+            {
+                formula: 'NaNO₂',
+                nameStock: 'nitrito de sodio',
+                nameSistematic: 'dioxonitrato (III) de sodio',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'Na', name: 'sodio', oxidation: '+1', count: 1 },
+                    { symbol: 'N', name: 'nitrógeno', oxidation: '+3', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 2 }
+                ],
+                explanation: 'Derivada del HNO₂. El grupo NO₂ tiene carga -1. Usado como conservante.'
+            },
+            {
+                formula: 'Ca(NO₃)₂',
+                nameStock: 'nitrato de calcio',
+                nameSistematic: 'trioxonitrato (V) de calcio',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'Ca', name: 'calcio', oxidation: '+2', count: 1 },
+                    { symbol: 'N', name: 'nitrógeno', oxidation: '+5', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 6 }
+                ],
+                explanation: 'El calcio (+2) necesita 2 grupos NO₃⁻ para equilibrar. Fertilizante.'
+            },
+            {
+                formula: 'K₂CO₃',
+                nameStock: 'carbonato de potasio',
+                nameSistematic: 'trioxocarbonato (IV) de potasio',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'K', name: 'potasio', oxidation: '+1', count: 2 },
+                    { symbol: 'C', name: 'carbono', oxidation: '+4', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'El grupo CO₃ tiene carga -2, necesita 2 potasios (+1) para equilibrar. Potasa.'
+            },
+            {
+                formula: 'NaHCO₃',
+                nameStock: 'hidrogenocarbonato de sodio',
+                nameSistematic: 'hidrogenotrioxocarbonato (IV) de sodio',
+                nameTraditional: 'bicarbonato de sodio',
+                type: 'sal ácida',
+                elements: [
+                    { symbol: 'Na', name: 'sodio', oxidation: '+1', count: 1 },
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 1 },
+                    { symbol: 'C', name: 'carbono', oxidation: '+4', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'Sal ácida del ácido carbónico. Conserva un H del ácido. Es el bicarbonato sódico usado en repostería.'
+            },
+            {
+                formula: 'Ca₃(PO₄)₂',
+                nameStock: 'fosfato de calcio',
+                nameSistematic: 'tetraoxofosfato (V) de calcio',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'Ca', name: 'calcio', oxidation: '+2', count: 3 },
+                    { symbol: 'P', name: 'fósforo', oxidation: '+5', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 8 }
+                ],
+                explanation: 'El grupo PO₄ tiene carga -3. Necesitamos 3 Ca²⁺ (+6) para 2 PO₄³⁻ (-6). Principal componente de huesos y dientes.'
+            },
+            {
+                formula: 'NaClO',
+                nameStock: 'hipoclorito de sodio',
+                nameSistematic: 'oxoclorato (I) de sodio',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'Na', name: 'sodio', oxidation: '+1', count: 1 },
+                    { symbol: 'Cl', name: 'cloro', oxidation: '+1', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 1 }
+                ],
+                explanation: 'Derivada del HClO. El grupo ClO tiene carga -1. Es la lejía, potente desinfectante.'
+            },
+            {
+                formula: 'KClO₃',
+                nameStock: 'clorato de potasio',
+                nameSistematic: 'trioxoclorato (V) de potasio',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'K', name: 'potasio', oxidation: '+1', count: 1 },
+                    { symbol: 'Cl', name: 'cloro', oxidation: '+5', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'Derivada del HClO₃. Potente oxidante usado en pirotecnia y cerillas.'
+            },
+            {
+                formula: 'KMnO₄',
+                nameStock: 'permanganato de potasio',
+                nameSistematic: 'tetraoxomanganato (VII) de potasio',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'K', name: 'potasio', oxidation: '+1', count: 1 },
+                    { symbol: 'Mn', name: 'manganeso', oxidation: '+7', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 4 }
+                ],
+                explanation: 'Manganeso en estado +7. El grupo MnO₄ tiene carga -1. Cristales violetas, potente oxidante.'
+            },
+            {
+                formula: 'K₂Cr₂O₇',
+                nameStock: 'dicromato de potasio',
+                nameSistematic: 'heptaoxodicromato (VI) de potasio',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'K', name: 'potasio', oxidation: '+1', count: 2 },
+                    { symbol: 'Cr', name: 'cromo', oxidation: '+6', count: 2 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 7 }
+                ],
+                explanation: 'El grupo Cr₂O₇ tiene carga -2. Necesita 2 K⁺. Cristales naranjas, oxidante fuerte.'
+            },
+            {
+                formula: 'CuSO₄',
+                nameStock: 'sulfato de cobre (II)',
+                nameSistematic: 'tetraoxosulfato (VI) de cobre',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'Cu', name: 'cobre', oxidation: '+2', count: 1 },
+                    { symbol: 'S', name: 'azufre', oxidation: '+6', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 4 }
+                ],
+                explanation: 'Cobre (+2) con grupo SO₄²⁻. Cristales azules. Vitriolo azul, usado como fungicida.'
+            },
+            {
+                formula: 'FeSO₄',
+                nameStock: 'sulfato de hierro (II)',
+                nameSistematic: 'tetraoxosulfato (VI) de hierro',
+                nameTraditional: 'sulfato ferroso',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'Fe', name: 'hierro', oxidation: '+2', count: 1 },
+                    { symbol: 'S', name: 'azufre', oxidation: '+6', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 4 }
+                ],
+                explanation: 'Hierro (+2) con grupo SO₄²⁻. Vitriolo verde, suplemento de hierro.'
+            },
+            {
+                formula: 'Al₂(SO₄)₃',
+                nameStock: 'sulfato de aluminio',
+                nameSistematic: 'tetraoxosulfato (VI) de aluminio',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'Al', name: 'aluminio', oxidation: '+3', count: 2 },
+                    { symbol: 'S', name: 'azufre', oxidation: '+6', count: 3 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 12 }
+                ],
+                explanation: '2 Al³⁺ (+6) para 3 SO₄²⁻ (-6). Usado en tratamiento de aguas.'
+            },
+            {
+                formula: 'NH₄NO₃',
+                nameStock: 'nitrato de amonio',
+                nameSistematic: 'trioxonitrato (V) de amonio',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'N', name: 'nitrógeno', oxidation: '-3/+5', count: 2 },
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 4 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 3 }
+                ],
+                explanation: 'El catión NH₄⁺ (amonio) con el anión NO₃⁻. Fertilizante muy usado.'
+            },
+            {
+                formula: '(NH₄)₂SO₄',
+                nameStock: 'sulfato de amonio',
+                nameSistematic: 'tetraoxosulfato (VI) de amonio',
+                type: 'oxisal',
+                elements: [
+                    { symbol: 'N', name: 'nitrógeno', oxidation: '-3', count: 2 },
+                    { symbol: 'H', name: 'hidrógeno', oxidation: '+1', count: 8 },
+                    { symbol: 'S', name: 'azufre', oxidation: '+6', count: 1 },
+                    { symbol: 'O', name: 'oxígeno', oxidation: '-2', count: 4 }
+                ],
+                explanation: '2 cationes NH₄⁺ para equilibrar SO₄²⁻. Fertilizante nitrogenado.'
+            },
+        ];
+
+        let currentMode = 'formula-to-name';
+        let currentCompound = null;
+        let correctCount = 0;
+        let totalCount = 0;
+
+        // Mapeo de números a prefijos
+        const numberToPrefixMap = {
+            '1': 'mono',
+            '2': 'di',
+            '3': 'tri',
+            '4': 'tetra',
+            '5': 'penta',
+            '6': 'hexa',
+            '7': 'hepta',
+            '8': 'octa',
+            '9': 'nona',
+            '10': 'deca'
+        };
+
+        const prefixToNumber = {
+            'mono': '1',
+            'di': '2',
+            'tri': '3',
+            'tetra': '4',
+            'penta': '5',
+            'hexa': '6',
+            'hepta': '7',
+            'octa': '8',
+            'nona': '9',
+            'deca': '10'
+        };
+
+        function setMode(mode, button) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            if (mode === 'formula-to-name') {
+                document.getElementById('question').textContent = '¿Cómo se llama este compuesto?';
+                document.getElementById('input-label').textContent = 'Escribe el nombre:';
+                document.getElementById('input-hint').textContent = 'Puedes usar números (2, 3, 4...) como prefijos y +/- para iones';
+            } else if (mode === 'name-to-formula') {
+                document.getElementById('question').textContent = '¿Cuál es la fórmula de este compuesto?';
+                document.getElementById('input-label').textContent = 'Escribe la fórmula:';
+                document.getElementById('input-hint').textContent = 'Usa números para subíndices. Ejemplo: H2O';
+            }
+
+            // Limpiar contenido actual para evitar parpadeo
+            document.getElementById('formula').textContent = '...';
+
+            // Pequeño delay para permitir que el DOM se actualice
+            setTimeout(() => {
+                nextExercise();
+            }, 50);
+        }
+
+        function createAnswerInputs() {
+            const container = document.getElementById('answers-container');
+            container.innerHTML = '';
+
+            if (currentMode === 'formula-to-name') {
+                // Modo: usuario escribe NOMBRES (múltiples nomenclaturas)
+                // Crear inputs para cada nomenclatura disponible
+                const nomenclaturas = [];
+
+                nomenclaturas.push({
+                    id: 'answer-stock',
+                    label: 'Nomenclatura de Stock',
+                    placeholder: 'Ejemplo: óxido de hierro (III)',
+                    type: 'stock'
+                });
+
+                nomenclaturas.push({
+                    id: 'answer-sistematic',
+                    label: 'Nomenclatura Sistemática',
+                    placeholder: 'Ejemplo: trióxido de dihierro',
+                    type: 'sistematic'
+                });
+
+                if (currentCompound.nameTraditional) {
+                    nomenclaturas.push({
+                        id: 'answer-traditional',
+                        label: 'Nomenclatura Tradicional',
+                        placeholder: 'Ejemplo: óxido férrico',
+                        type: 'traditional'
+                    });
+                }
+
+                if (currentCompound.nameAcid) {
+                    nomenclaturas.push({
+                        id: 'answer-acid',
+                        label: 'En disolución acuosa',
+                        placeholder: 'Ejemplo: ácido clorhídrico',
+                        type: 'acid'
+                    });
+                }
+
+                nomenclaturas.forEach((nom, index) => {
+                    const group = document.createElement('div');
+                    group.className = 'answer-group';
+
+                    const label = document.createElement('label');
+                    label.className = 'answer-label';
+                    label.textContent = nom.label;
+                    label.setAttribute('for', nom.id);
+
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.id = nom.id;
+                    input.setAttribute('data-type', nom.type);
+                    input.placeholder = nom.placeholder;
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            // Si no es el último campo, saltar al siguiente
+                            if (index < nomenclaturas.length - 1) {
+                                const nextInput = document.getElementById(nomenclaturas[index + 1].id);
+                                if (nextInput) nextInput.focus();
+                            } else {
+                                // Si es el último campo, enviar respuesta
+                                checkAnswer();
+                            }
+                        }
+                    });
+
+                    group.appendChild(label);
+                    group.appendChild(input);
+                    container.appendChild(group);
+                });
+            } else if (currentMode === 'name-to-formula') {
+                // Modo: usuario escribe FÓRMULA (un solo input)
+                const group = document.createElement('div');
+                group.className = 'answer-group';
+
+                const label = document.createElement('label');
+                label.className = 'answer-label';
+                label.textContent = 'Fórmula química';
+                label.setAttribute('for', 'answer-formula');
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = 'answer-formula';
+                input.placeholder = 'Ejemplo: H2O, Fe2O3';
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') checkAnswer();
+                });
+
+                group.appendChild(label);
+                group.appendChild(input);
+                container.appendChild(group);
+            }
+        }
+
+        function nextExercise() {
+            currentCompound = compounds[Math.floor(Math.random() * compounds.length)];
+            document.getElementById('feedback').classList.remove('show');
+
+            // Actualizar todo el contenido en un solo bloque para evitar parpadeo
+            const formulaElement = document.getElementById('formula');
+
+            if (currentMode === 'formula-to-name') {
+                // Modo: mostrar FÓRMULA, usuario escribe NOMBRE
+                formulaElement.innerHTML = currentCompound.formula;
+            } else if (currentMode === 'name-to-formula') {
+                // Modo: mostrar NOMBRE, usuario escribe FÓRMULA
+                const validNames = getAllValidNames(currentCompound);
+                const randomName = validNames[Math.floor(Math.random() * validNames.length)];
+                formulaElement.textContent = randomName;
+            }
+
+            // Crear los inputs según el modo y el compuesto
+            createAnswerInputs();
+
+            // Enfocar el primer input
+            setTimeout(() => {
+                const firstInput = document.querySelector('#answers-container input');
+                if (firstInput) firstInput.focus();
+            }, 50);
+        }
+
+        // Diccionario de errores ortográficos comunes y sus correcciones
+        const spellingCorrections = {
+            'zinc': 'cinc',
+            'sulhidrico': 'sulfhidrico',
+            'sulhídrico': 'sulfhídrico',
+            'surfurico': 'sulfurico',
+            'surfúrico': 'sulfúrico',
+            'fosforico': 'fosfórico',
+            'sulfuroso': 'sulfuroso',
+            'oxijeno': 'oxigeno',
+            'hidrojeno': 'hidrogeno',
+            'azufre': 'azufre',
+            'asufre': 'azufre',
+            'fluor': 'flúor',
+            'yodo': 'yodo',
+            'iodo': 'yodo',
+            'platino': 'platino',
+            'bromuro': 'bromuro',
+            'bromo': 'bromo',
+            'carbonico': 'carbónico',
+            'nitrico': 'nítrico',
+            'nitrito': 'nitrito',
+            'sulfato': 'sulfato',
+            'sulfito': 'sulfito',
+            'perclorico': 'perclórico',
+            'hipocloroso': 'hipocloroso',
+            'clórico': 'clórico',
+            'clorico': 'clórico',
+            'permanganato': 'permanganato',
+            'dicromato': 'dicromato',
+            'cromato': 'cromato'
+        };
+
+        function checkSpelling(answer) {
+            let corrected = answer.toLowerCase();
+            let errors = [];
+
+            // Buscar errores ortográficos comunes
+            for (const [wrong, correct] of Object.entries(spellingCorrections)) {
+                const regex = new RegExp('\\b' + wrong + '\\b', 'gi');
+                if (regex.test(corrected)) {
+                    if (wrong !== correct) {
+                        errors.push({
+                            wrong: wrong,
+                            correct: correct,
+                            context: `Se escribe "${correct}", no "${wrong}"`
+                        });
+                    }
+                    corrected = corrected.replace(regex, correct);
+                }
+            }
+
+            return { corrected, errors };
+        }
+
+        function normalizeAnswer(answer) {
+            // Convertir a minúsculas y quitar espacios extra
+            let normalized = answer.toLowerCase().trim().replace(/\s+/g, ' ');
+
+            // Reemplazar números por prefijos
+            Object.keys(numberToPrefixMap).forEach(num => {
+                const regex = new RegExp('\\b' + num, 'g');
+                normalized = normalized.replace(regex, numberToPrefixMap[num]);
+            });
+
+            // Reemplazar +/- por sus significados
+            normalized = normalized.replace(/\+/g, ' catión').replace(/-/g, ' anión');
+
+            // Quitar paréntesis para aceptar valencias con o sin paréntesis
+            // Ejemplo: "hierro (III)" y "hierro III" serán equivalentes
+            normalized = normalized.replace(/\(/g, '').replace(/\)/g, '');
+
+            // Quitar tildes para comparación más flexible
+            normalized = normalized.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+            return normalized;
+        }
+
+        function getAllValidNames(compound) {
+            const names = [compound.nameStock, compound.nameSistematic];
+            if (compound.nameTraditional) names.push(compound.nameTraditional);
+            if (compound.nameAcid) names.push(compound.nameAcid);
+            return names;
+        }
+
+        function normalizeFormula(formula) {
+            // Quitar espacios y convertir a formato estándar
+            let normalized = formula.replace(/\s+/g, '');
+
+            const subscripts = {'0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉'};
+
+            // Reemplazar números normales con subíndices después de elementos
+            normalized = normalized.replace(/([A-Z][a-z]?)(\d+)/g, (match, element, number) => {
+                return element + number.split('').map(d => subscripts[d]).join('');
+            });
+
+            // Reemplazar números después de paréntesis: (OH)2 → (OH)₂
+            normalized = normalized.replace(/(\))(\d+)/g, (match, paren, number) => {
+                return paren + number.split('').map(d => subscripts[d]).join('');
+            });
+
+            return normalized;
+        }
+
+        function checkAnswer() {
+            let isCorrect = false;
+            let explanation = '';
+            const results = [];
+
+            if (currentMode === 'formula-to-name') {
+                // Modo: validar NOMBRES que escribió el usuario
+                // Validar cada nomenclatura
+                const stockInput = document.getElementById('answer-stock');
+                const sistematicInput = document.getElementById('answer-sistematic');
+                const traditionalInput = document.getElementById('answer-traditional');
+                const acidInput = document.getElementById('answer-acid');
+
+                let allSpellingErrors = [];
+                let allCorrect = true;
+
+                // Validar Stock
+                if (stockInput) {
+                    const userAnswer = stockInput.value.trim();
+                    const spellingCheck = checkSpelling(userAnswer);
+                    const normalizedAnswer = normalizeAnswer(userAnswer);
+                    const normalizedCorrect = normalizeAnswer(currentCompound.nameStock);
+                    const normalizedCorrected = normalizeAnswer(spellingCheck.corrected);
+                    const correct = normalizedAnswer === normalizedCorrect || normalizedCorrected === normalizedCorrect;
+
+                    results.push({
+                        type: 'Stock',
+                        correct: correct,
+                        userAnswer: userAnswer,
+                        correctAnswer: currentCompound.nameStock,
+                        input: stockInput
+                    });
+
+                    if (spellingCheck.errors.length > 0 && correct) {
+                        allSpellingErrors.push(...spellingCheck.errors);
+                    }
+
+                    if (!correct) allCorrect = false;
+                    stockInput.className = correct ? 'correct' : 'incorrect';
+                }
+
+                // Validar Sistemática
+                if (sistematicInput) {
+                    const userAnswer = sistematicInput.value.trim();
+                    const spellingCheck = checkSpelling(userAnswer);
+                    const normalizedAnswer = normalizeAnswer(userAnswer);
+                    const normalizedCorrect = normalizeAnswer(currentCompound.nameSistematic);
+                    const normalizedCorrected = normalizeAnswer(spellingCheck.corrected);
+                    const correct = normalizedAnswer === normalizedCorrect || normalizedCorrected === normalizedCorrect;
+
+                    results.push({
+                        type: 'Sistemática',
+                        correct: correct,
+                        userAnswer: userAnswer,
+                        correctAnswer: currentCompound.nameSistematic,
+                        input: sistematicInput
+                    });
+
+                    if (spellingCheck.errors.length > 0 && correct) {
+                        allSpellingErrors.push(...spellingCheck.errors);
+                    }
+
+                    if (!correct) allCorrect = false;
+                    sistematicInput.className = correct ? 'correct' : 'incorrect';
+                }
+
+                // Validar Tradicional
+                if (traditionalInput && currentCompound.nameTraditional) {
+                    const userAnswer = traditionalInput.value.trim();
+                    const spellingCheck = checkSpelling(userAnswer);
+                    const normalizedAnswer = normalizeAnswer(userAnswer);
+                    const normalizedCorrect = normalizeAnswer(currentCompound.nameTraditional);
+                    const normalizedCorrected = normalizeAnswer(spellingCheck.corrected);
+                    const correct = normalizedAnswer === normalizedCorrect || normalizedCorrected === normalizedCorrect;
+
+                    results.push({
+                        type: 'Tradicional',
+                        correct: correct,
+                        userAnswer: userAnswer,
+                        correctAnswer: currentCompound.nameTraditional,
+                        input: traditionalInput
+                    });
+
+                    if (spellingCheck.errors.length > 0 && correct) {
+                        allSpellingErrors.push(...spellingCheck.errors);
+                    }
+
+                    if (!correct) allCorrect = false;
+                    traditionalInput.className = correct ? 'correct' : 'incorrect';
+                }
+
+                // Validar Ácido
+                if (acidInput && currentCompound.nameAcid) {
+                    const userAnswer = acidInput.value.trim();
+                    const spellingCheck = checkSpelling(userAnswer);
+                    const normalizedAnswer = normalizeAnswer(userAnswer);
+                    const normalizedCorrect = normalizeAnswer(currentCompound.nameAcid);
+                    const normalizedCorrected = normalizeAnswer(spellingCheck.corrected);
+                    const correct = normalizedAnswer === normalizedCorrect || normalizedCorrected === normalizedCorrect;
+
+                    results.push({
+                        type: 'En disolución',
+                        correct: correct,
+                        userAnswer: userAnswer,
+                        correctAnswer: currentCompound.nameAcid,
+                        input: acidInput
+                    });
+
+                    if (spellingCheck.errors.length > 0 && correct) {
+                        allSpellingErrors.push(...spellingCheck.errors);
+                    }
+
+                    if (!correct) allCorrect = false;
+                    acidInput.className = correct ? 'correct' : 'incorrect';
+                }
+
+                isCorrect = allCorrect;
+
+                if (isCorrect) {
+                    explanation = `<strong>¡Perfecto! ✅</strong> Has acertado todas las nomenclaturas de <strong>${currentCompound.formula}</strong><br><br>`;
+
+                    // Advertir sobre errores ortográficos si los hay
+                    if (allSpellingErrors.length > 0) {
+                        explanation += '<strong>⚠️ Notas ortográficas:</strong><br>';
+                        explanation += '<div style="background: #fff3cd; padding: 10px; border-radius: 5px; border-left: 4px solid #ffc107; margin: 10px 0;">';
+                        allSpellingErrors.forEach(error => {
+                            explanation += `📝 ${error.context}<br>`;
+                        });
+                        explanation += '</div>';
+                    }
+
+                    explanation += '<strong>📚 Tus respuestas correctas:</strong><br>';
+                    results.forEach(r => {
+                        explanation += `✓ <strong>${r.type}:</strong> ${r.correctAnswer}<br>`;
+                    });
+                } else {
+                    explanation = `<strong>Algunas respuestas no son correctas</strong><br><br>`;
+                    explanation += '<strong>📊 Resultados por nomenclatura:</strong><br><br>';
+
+                    results.forEach(r => {
+                        if (r.correct) {
+                            explanation += `<div style="background: #d1fae5; padding: 8px; border-radius: 5px; margin-bottom: 8px; border-left: 4px solid #10b981;">`;
+                            explanation += `✅ <strong>${r.type}:</strong> ${r.correctAnswer} <span style="color: #059669;">(Correcto)</span>`;
+                            explanation += `</div>`;
+                        } else {
+                            explanation += `<div style="background: #fee2e2; padding: 8px; border-radius: 5px; margin-bottom: 8px; border-left: 4px solid #ef4444;">`;
+                            explanation += `❌ <strong>${r.type}:</strong><br>`;
+                            explanation += `Tu respuesta: "${r.userAnswer}"<br>`;
+                            explanation += `Correcta: <strong>"${r.correctAnswer}"</strong>`;
+                            explanation += `</div>`;
+                        }
+                    });
+
+                    // Explicación educativa
+                    explanation += `<br><strong>🔬 Tipo de compuesto:</strong> ${currentCompound.type}<br><br>`;
+                    explanation += '<strong>⚛️ Composición:</strong><br>';
+                    explanation += '<div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.5); border-radius: 5px;">';
+                    currentCompound.elements.forEach(elem => {
+                        explanation += `<strong>${elem.symbol}</strong> (${elem.name}): ${elem.count} átomo${elem.count > 1 ? 's' : ''}, estado de oxidación <strong>${elem.oxidation}</strong><br>`;
+                    });
+                    explanation += '</div>';
+
+                    explanation += `<br><strong>📝 Explicación:</strong><br>`;
+                    explanation += `<div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.3); border-radius: 5px; line-height: 1.6;">`;
+                    explanation += currentCompound.explanation;
+                    explanation += '</div>';
+                }
+            } else if (currentMode === 'name-to-formula') {
+                // Modo: validar FÓRMULA que escribió el usuario
+                const formulaInput = document.getElementById('answer-formula');
+                const userAnswer = formulaInput ? formulaInput.value.trim() : '';
+                const normalizedAnswer = normalizeFormula(userAnswer);
+                const normalizedCorrect = currentCompound.formula;
+
+                isCorrect = normalizedAnswer === normalizedCorrect;
+
+                if (formulaInput) {
+                    formulaInput.className = isCorrect ? 'correct' : 'incorrect';
+                }
+
+                if (isCorrect) {
+                    explanation = `¡Perfecto! ✅ <strong>${currentCompound.nameStock}</strong> tiene la fórmula <strong>${currentCompound.formula}</strong>.`;
+
+                    explanation += '<br><br><strong>⚛️ Composición:</strong><br>';
+                    currentCompound.elements.forEach(elem => {
+                        explanation += `• ${elem.symbol} (${elem.name}): ${elem.count} átomo${elem.count > 1 ? 's' : ''}, estado de oxidación ${elem.oxidation}<br>`;
+                    });
+                } else {
+                    explanation = `<strong>❌ La fórmula no es correcta</strong><br><br>`;
+                    explanation += `<strong>Tu respuesta:</strong> ${userAnswer}<br>`;
+                    explanation += `<strong>Respuesta correcta:</strong> ${currentCompound.formula}<br><br>`;
+
+                    // Tabla de elementos
+                    explanation += '<strong>⚛️ Composición correcta:</strong><br>';
+                    explanation += '<div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.5); border-radius: 5px;">';
+                    currentCompound.elements.forEach(elem => {
+                        explanation += `<strong>${elem.symbol}</strong> (${elem.name}): ${elem.count} átomo${elem.count > 1 ? 's' : ''}, estado de oxidación <strong>${elem.oxidation}</strong><br>`;
+                    });
+                    explanation += '</div>';
+
+                    // Explicación paso a paso
+                    explanation += `<br><strong>📝 Cómo se forma la fórmula:</strong><br>`;
+                    explanation += `<div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.3); border-radius: 5px; line-height: 1.6;">`;
+                    explanation += currentCompound.explanation;
+                    explanation += '<br><br><strong>Reglas importantes:</strong><br>';
+                    explanation += '1. Los subíndices se escriben como números normales (ejemplo: H2O)<br>';
+                    explanation += '2. El elemento más electropositivo va primero<br>';
+                    explanation += '3. La suma de las cargas debe ser cero<br>';
+                    explanation += '4. Se simplifican los subíndices cuando es posible';
+                    explanation += '</div>';
+                }
+            }
+
+            if (isCorrect) {
+                correctCount++;
+            }
+            totalCount++;
+            updateStats();
+            showFeedback(isCorrect, isCorrect ? '¡Correcto! ✅' : 'Respuesta incorrecta', explanation);
+
+            // Auto-avanzar después de respuesta correcta
+            if (isCorrect) {
+                setTimeout(nextExercise, 3500);
+            }
+        }
+
+        function showFeedback(isCorrect, title, explanation) {
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback show ' + (isCorrect ? 'correct' : 'incorrect');
+            document.getElementById('feedback-title').innerHTML = title;
+            document.getElementById('feedback-explanation').innerHTML = explanation;
+        }
+
+        function updateStats() {
+            document.getElementById('correct-count').textContent = correctCount;
+            document.getElementById('total-count').textContent = totalCount;
+            const percentage = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
+            document.getElementById('percentage').textContent = percentage + '%';
+        }
+
+        // Inicializar cuando el DOM esté completamente cargado
+        document.addEventListener('DOMContentLoaded', function() {
+            nextExercise();
+        });
+    </script>
+</body>
+</html>
